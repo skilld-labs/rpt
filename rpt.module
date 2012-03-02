@@ -5,20 +5,19 @@
  */
 function rpt_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'user_admin_settings') {
+    // Add checkbox with setting of password automatic generation.
     $form['registration_cancellation']['rpt_password_generate'] = array(
       '#type' => 'checkbox',
       '#title' => t('Generate password automatically'),
-      '#description' => t('Works only when e-mail verification is not required and users allowed to create new accounts.'),
+      '#description' => t('Hide password fields on user register form.'),
       '#default_value' => variable_get('rpt_password_generate', 0),
       '#weight' => 0,
     );
   }
   elseif ($form_id == 'user_register_form') {
-    $generate_password     = variable_get('rpt_password_generate', 0);
-    $user_registration     = variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL);
-    $verification_required = variable_get('user_email_verification', TRUE);
-    $user_registration_allowed = in_array($user_registration, array(USER_REGISTER_VISITORS, USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL));
-    if ($user_registration_allowed && !$verification_required && $generate_password) {
+    // Hide password field and generate password for user.
+    $generate_password = variable_get('rpt_password_generate', 0);
+    if ($generate_password) {
       $form['account']['pass']['#type']  = 'value';
       $form['account']['pass']['#value'] = user_password();
     }
