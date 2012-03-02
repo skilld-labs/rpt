@@ -1,0 +1,3 @@
+name = Registration Password Token
+description = Provides user password token during registration.
+core = 7.x
