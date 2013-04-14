@@ -5,6 +5,7 @@
  */
 function rpt_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'user_admin_settings') {
+
     // Add checkbox with setting of password automatic generation.
     $form['registration_cancellation']['rpt_password_generate'] = array(
       '#type' => 'checkbox',
@@ -13,13 +14,23 @@ function rpt_form_alter(&$form, &$form_state, $form_id) {
       '#default_value' => variable_get('rpt_password_generate', 0),
       '#weight' => 0,
     );
+
+    $form['registration_cancellation']['rpt_password_length'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Password length'),
+      '#description' => t('Length for generated password.'),
+      '#default_value' => variable_get('rpt_password_length', 10),
+      '#weight' => 1,
+    );
   }
   elseif ($form_id == 'user_register_form') {
     // Hide password field and generate password for user.
     $generate_password = variable_get('rpt_password_generate', 0);
     if ($generate_password) {
       $form['account']['pass']['#type']  = 'value';
-      $form['account']['pass']['#value'] = user_password();
+
+      $password_length = variable_get('rpt_password_length', 10);
+      $form['account']['pass']['#value'] = user_password($password_length);
     }
   }
 }

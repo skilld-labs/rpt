@@ -10,4 +10,5 @@
  */
 function rpt_uninstall() {
   variable_del('rpt_password_generate');
+  variable_del('rpt_password_length');
 }
