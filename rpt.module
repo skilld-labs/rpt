@@ -43,5 +43,8 @@ function rpt_tokens($type, $tokens, array $data = array(), array $options = arra
   if (isset($data['user']) && isset($data['user']->password)) {
     $replacements['[user:password]'] = $data['user']->password;
   }
+  elseif (isset($data['user']) && !isset($data['user']->password)) {
+    $replacements['[user:password]'] = t('Your password');
+  }
   return $replacements;
 }
