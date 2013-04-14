@@ -1,3 +1,7 @@
 name = Registration Password Token
 description = Provides user password token during registration.
+package = User Access & Authentication
 core = 7.x
+configure = admin/config/people/accounts
+
+dependencies[] = user
