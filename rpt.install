@@ -9,6 +9,5 @@
  * Implements hook_uninstall().
  */
 function rpt_uninstall() {
-  variable_del('rpt_password_generate');
-  variable_del('rpt_password_length');
+  \Drupal::service('config.factory')->getEditable('rpt.settings')->delete();
 }

@@ -1,14 +1,14 @@
 INSTALL
 ==========
 
-1. Extract module into /sites/all/modules folder.
+1. Extract module into /modules folder.
 2. Enable module on /admin/modules page.
 
 
 USAGE
 ==========
 
-Go to /admin/config/people/accounts/settings page and use new token [user:password] in mail texts.
+Go to /admin/config/people/accounts page and use new token [user:password] in mail texts.
 Also you may enable automatic generation of a password by checking of the appropriate checkbox on this page.
 
 

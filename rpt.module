@@ -1,9 +1,17 @@
 <?php
 
 /**
+ * @file
+ *   Registration Password Token module.
+ */
+
+use \Drupal\Core\Form\FormStateInterface;
+use \Drupal\Core\Render\BubbleableMetadata;
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
-function rpt_form_user_admin_settings_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function rpt_form_user_admin_settings_alter(&$form, FormStateInterface $form_state) {
   $settings = \Drupal::config('rpt.settings');
   // Add checkbox with setting of password automatic generation.
   $form['registration_cancellation']['rpt_password_generate'] = array(
@@ -30,7 +38,7 @@ function rpt_form_user_admin_settings_alter(&$form, \Drupal\Core\Form\FormStateI
  *
  * @see rpt_form_user_admin_settings_alter()
  */
-function rpt_user_admin_settings_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function rpt_user_admin_settings_submit($form, FormStateInterface $form_state) {
   \Drupal::configFactory()->getEditable('rpt.settings')
     ->set('password_generate', $form_state->getValue('rpt_password_generate'))
     ->set('password_length', $form_state->getValue('rpt_password_length'))
@@ -40,7 +48,7 @@ function rpt_user_admin_settings_submit($form, \Drupal\Core\Form\FormStateInterf
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function rpt_form_user_register_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function rpt_form_user_register_form_alter(&$form, FormStateInterface $form_state) {
   $settings = \Drupal::config('rpt.settings');
   // Hide password field and generate password for user.
   $generate_password = $settings->get('password_generate');
@@ -55,7 +63,7 @@ function rpt_form_user_register_form_alter(&$form, \Drupal\Core\Form\FormStateIn
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function rpt_form_user_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function rpt_form_user_form_alter(&$form, FormStateInterface $form_state) {
   array_unshift($form['actions']['submit']['#submit'], 'rpt_user_form_submit');
 }
 
@@ -64,9 +72,12 @@ function rpt_form_user_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $
  *
  * @see: rpt_form_user_form_alter()
  */
-function rpt_user_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function rpt_user_form_submit($form, FormStateInterface $form_state) {
   $pass = $form_state->getValue('pass');
-  // @todo: Assign pass to the user object.
+  if ($pass) {
+    $account = $form_state->getFormObject()->getEntity();
+    $account->password = $pass;
+  }
 }
 
 /**
@@ -83,7 +94,7 @@ function rpt_token_info() {
 /**
  * Implements hook_tokens().
  */
-function rpt_tokens($type, $tokens, array $data = array(), array $options = array(), \Drupal\Core\Render\BubbleableMetadata $bubbleable_metadata) {
+function rpt_tokens($type, $tokens, array $data = array(), array $options = array(), BubbleableMetadata $bubbleable_metadata) {
   $replacements = array();
 
   foreach ($tokens as $name => $value) {
